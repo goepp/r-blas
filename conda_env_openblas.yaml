@@ -1,0 +1,10 @@
+name: r-openblas
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - conda-forge::libblas=*=*_openblas
+  - conda-forge::r-base
+  - conda-forge::r-xml2
+  - conda-forge::r-openssl
+  - conda-forge::r-git2r
