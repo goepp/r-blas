@@ -106,12 +106,26 @@ By changing `mkl` to `openblas` or `blis` in the file `conda_env_mkl.yaml` we cr
 | Overall (trimmed) mean              | 0.65   | 0.26 |  0.20    | **0.19** | 
 | Total time                          | 29.0   | 4.05 |  3.53    | **3.13** | 
 
-Conclusion: on my system, I have the same performance ratios as the aforementioned blog posts.
-I plan to systematically use MKL (or OpenBLAS) with R.
+MKL and OpenBLAS clearly have an edge. Let's see the other benchmark before concluding.
 
 #### revo-script.R
 
-TODO
+This script performs some of the most typically used matrix calculations: crossproduct, Cholesky decomposition, singular value decomposition (SVD), principal component analysis (PCA), and linear discriminant analysis (LDA).
+These operations are run on very large matrices ($10000$ x $2000$).
+
+The elapsed times in seconds are:
+
+| Matrix operation | R BLAS | BLIS  | OpenBLAS | MKL     |
+|------------------|--------|-------|----------|---------|
+| crossprod        | 134    |4.91   |1.67      |**1.45** | 
+| Cholesky         | 19.3   |1.14   |**0.41**  |0.427    | 
+| SVD              | 38.3   |5.01   |4.55      |**3.07** | 
+| PCA              | 136    |12.3   |8.95      |**5.14** | 
+| LDA              | 100    |20.8   |23.3      |**16.2** | 
+
+
+**Conclusion**: on my system, I have the same performance ratios as the aforementioned blog posts: OpenBLAS and Intel MKL widely outperform the other libraries. **And the BLAS shipped with R and used by default is very slow compared to using the alternatives.**
+I plan to systematically use MKL (or OpenBLAS) with R.
 
 #### Do your own benchmarking
 I included the files `conda_env_<BLAS_library>.yaml` for anyone to easily reproduce this benchmark.
@@ -121,6 +135,11 @@ Please tell me if you find the same results on your system (OS + CPU): I would a
 
 ### Issues with parallelized code
 [This post](https://blog.revolutionanalytics.com/2015/10/edge-cases-in-using-the-intel-mkl-and-parallel-programming.html) warns that multithreaded libraries, like MKL, do not work well with parallelized code (using, for instance, `parallel::mclapply`). In that case, the author advises to set the number of threads to be used to 1, which, interestingly, does not alter the performance of Intel MKL very significantly.
+
+## What about sparse matrices?
+Applied mathematics are filled with problems whose solution is found by inverting a (large) matrix, and quite often, that matrix is sparse.
+
+
 
 
 ## References
