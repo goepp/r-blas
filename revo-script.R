@@ -1,7 +1,3 @@
-# Set MKL threads if Revolution R Open or Revoltion R Enterprise is available
-#if(require(Revobase)){
-#  setMKLthreads(4)
-#}
 
 # Initialization
 set.seed(1)
