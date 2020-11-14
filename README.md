@@ -137,7 +137,28 @@ Please tell me if you find the same results on your system (OS + CPU): I would a
 [This post](https://blog.revolutionanalytics.com/2015/10/edge-cases-in-using-the-intel-mkl-and-parallel-programming.html) warns that multithreaded libraries, like MKL, do not work well with parallelized code (using, for instance, `parallel::mclapply`). In that case, the author advises to set the number of threads to be used to 1, which, interestingly, does not alter the performance of Intel MKL very significantly.
 
 ## What about sparse matrices?
-Applied mathematics are filled with problems whose solution is found by inverting a (large) matrix, and quite often, that matrix is sparse.
+Applied mathematics are filled with problems whose solution is found by inverting a (large) matrix. And quite often, that matrix is sparse.
+The package `Matrix` provides a rich set of classes for sparse matrices, and provides sparse implementations for many of the most useful matrix operations.
+It namely implements crossproduct, Cholesky decomposition, and linear system solving for sparse matrices.
+The goal of this section is to verify whether the choice of BLAS library has an impact the speed of these functions.
+
+
+I consider square matrices with 8000, either non-symmetric or symmetric positive definite (spd).
+The elapsed times (in seconds) are:
+
+| Matrix operation             | R BLAS | BLIS |  OpenBLAS |  MKL |
+|------------------------------|--------|-----|-----|-----|
+|crossprod                     |6.35 |5.47|**5.26**|7.93|
+|Cholesky                      |111 |88.8|**88.1**|156|
+|Schur                         | 629|122.7|108|**91.177**|
+|solve                         |337 |316|**279**| 395|
+|solve (with spd matrix)       |73.2 |8.67|**3.82**|4.646|
+|solve (after Cholesky decomp) |0.202 |**0.164**|**0.165**|0.235|
+
+Conclusion: the choice of BLAS impact only on `Schur` and `solve` (with spd matrices).
+Note: The `solve` using `Cholesky` decomposition calls a C library called CHOLMOD (see ?Matrix::Cholesky), so it is expected that its computing time does not depend on the BLAS library.
+This line is here to remind that when inverting several sparse matrices with the *same* sparsity pattern, the choice of the BLAS library does not matter. Indeed, in this case, one can call `Cholesky` *once* (which is the computational bottleneck) and use that decompotion many times in the `Matrix::solve` function, which computes way faster than without reusing the Cholesky decomposition (see `?Matrix::`CHMfactor-class``.
+
 
 
 
