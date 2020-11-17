@@ -75,6 +75,7 @@ A quick google search finds many blog posts which offer benchmarks between the a
 
 - [https://csantill.github.io/RPerformanceWBLAS/](https://csantill.github.io/RPerformanceWBLAS/)
 - [https://www.r-bloggers.com/2017/11/why-is-r-slow-some-explanations-and-mklopenblas-setup-to-try-to-fix-this/](https://www.r-bloggers.com/2017/11/why-is-r-slow-some-explanations-and-mklopenblas-setup-to-try-to-fix-this/)
+- This [post on the Intel website](https://software.intel.com/content/www/us/en/develop/articles/performance-comparison-of-openblas-and-intel-math-kernel-library-in-r.html) compares MKL to OpenBLAS for basic R operations, on an Intel® Xeon® processor E5-2697 v4.
 
 
 Most of them seem to conclude that:
