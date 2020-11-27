@@ -24,7 +24,8 @@ BLAS is actually a *specification* for the format used to call the common linear
 LAPACK is built on top of BLAS in the sense that it calls functions from BLAS. Hence, choosing a faster BLAS implementaion for your CPU may accelerate LAPACK as well.
 Likewise BLAS, LAPACK comes under different implementations. Netlib LAPACK is the official LAPACK implementation, and Intel MKL and Accelerate both include a reimplementation of LAPACK.
 
-Given that BLAS and LAPACK implementations often come bundled together, I will refer to both libraries under the name "BLAS".
+Since LAPACK uses functions in BLAS to perform its linear algebra operations, changing the implementation of BLAS can greatly effect the speed of calls to LAPACK functions, and hence, the linear algebra operations done by R.
+This is why this document focuses on comparing BLAS libraries.
 
 ## What is the best-fit BLAS for R
 
