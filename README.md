@@ -7,10 +7,10 @@ I read in many places that R can get way faster is you change the BLAS library i
 
 This repo is a tentative effort to understanding how to tune R to have good performances. If you have comments, critics, suggestions of benchmarks, or if you have results that you think may be useful, please leave a pull request!
 
-## Choice of the numerical libraries
+## What are BLAS and LAPACK anyway?
 Most matrix computations in R and other programming languages are done by calling two numerical linear algebra libraries: BLAS (Basic Linear Algebra Subprograms) and LAPACK (Linear Algebra Package).
 
-## BLAS
+### BLAS
 BLAS is actually a *specification* for the format used to call the common linear alebgra operations, so there exists different *implementations* of BLAS. Several implementations exist, some being optimized for better performance on a set specific CPUs. We name the main implementations hereafter (see details on their Wikipedia pages):
 
 - Netlib BLAS: the official implementation
@@ -20,19 +20,19 @@ BLAS is actually a *specification* for the format used to call the common linear
 - ATLAS (Automatically Tuned Linear Algebra Software): open-source (BSD Licence)
 - Accelerate: developped by Apple, optimized for MacOS and iOS.
 
-## LAPACK
+### LAPACK
 LAPACK is built on top of BLAS in the sense that it calls functions from BLAS. Hence, choosing a faster BLAS implementaion for your CPU may accelerate LAPACK as well.
 Likewise BLAS, LAPACK comes under different implementations. Netlib LAPACK is the official LAPACK implementation, and Intel MKL and Accelerate both include a reimplementation of LAPACK.
 
 Since LAPACK uses functions in BLAS to perform its linear algebra operations, changing the implementation of BLAS can greatly effect the speed of calls to LAPACK functions, and hence, the linear algebra operations done by R.
 This is why this document focuses on comparing BLAS libraries.
 
-## What is the best-fit BLAS for R
+## What is the best-fit BLAS for R?
 
 *A small word of caution*: for simplicity of use, stability, and reproducibility, R provides an internal BLAS and links its core functions, as well as the installed package, to it.
 The [R installation and administration guide](https://cran.r-project.org/doc/manuals/r-release/R-admin.html#BLAS) gives details on this.
 
-### How to switching between BLASs
+### How to switch between BLAS libraries
 
 #### When compiling R
 The [R installation and administration guide](https://cran.r-project.org/doc/manuals/r-release/R-admin.html#BLAS) also documents one possible way to tell R which BLAS that R will use. It consists in [compiling R](https://cran.r-project.org/doc/manuals/r-release/R-admin.html#Simple-compilation) with the flag `--with-blas` in the configuration file.
@@ -43,8 +43,10 @@ On Debian and Ubuntu, the command `update-alternatives` enables to set a symboli
 This [blog post](https://brettklamer.com/diversions/statistical/faster-blas-in-r/) explains how.
 
 #### Using a virtual environment
+This option uses a virtual environment, which allows to switch BLAS libraries in a containarized setting. I advise to use this if you want to play around and test different BLAS libraries without fear of making any damage to your R installation or your OS.
+
 Conda enables to install R within a virtual environment. Within that virtual environment, we can choose a specific BLAS to be used by R.
-The following commands install `conda` and creates the virtual environment (using the `conda_env.yaml` configuration file) with Intel MKL (written by [Héctor Climente-Gonzalez](@hclimente)).
+The following commands install `conda` and creates the virtual environment (using the `conda_env.yaml` configuration file) with Intel MKL (written by @hclimente).
 
 ```bash
 # Download conda installer
@@ -159,7 +161,7 @@ The elapsed times (in seconds) are:
 |solve (with spd matrix)       |73.2 |8.67|**3.82**|4.646|
 |solve (after Cholesky decomp) |0.202 |**0.164**|**0.165**|0.235|
 
-Conclusion: the choice of BLAS impact only on `Schur` and `solve` (with spd matrices).
+Conclusion: the choice of BLAS impact only `Schur` and `solve` (with spd matrices).
 Note: The `solve` using `Cholesky` decomposition calls a C library called CHOLMOD (see ?Matrix::Cholesky), so it is expected that its computing time does not depend on the BLAS library.
 This line is here to remind that when inverting several sparse matrices with the *same* sparsity pattern, the choice of the BLAS library does not matter. Indeed, in this case, one can call `Cholesky` *once* (which is the computational bottleneck) and use that decompotion many times in the `Matrix::solve` function, which computes way faster than without reusing the Cholesky decomposition (see `?Matrix::`CHMfactor-class``.
 
