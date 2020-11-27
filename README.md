@@ -11,7 +11,7 @@ This repo is a tentative effort to understanding how to tune R to have good perf
 Most matrix computations in R and other programming languages are done by calling two numerical linear algebra libraries: BLAS (Basic Linear Algebra Subprograms) and LAPACK (Linear Algebra Package).
 
 ## BLAS
-BLAS is actually a *specification* for the format used to call the common linear alebgra operations, so there exists different *implementations* of BLAS. Many implementations have been written, each including being optimized for better performance on a set specific CPUs. We name the main implementations hereafter (see details on their Wikipedia pages):
+BLAS is actually a *specification* for the format used to call the common linear alebgra operations, so there exists different *implementations* of BLAS. Several implementations exist, some being optimized for better performance on a set specific CPUs. We name the main implementations hereafter (see details on their Wikipedia pages):
 
 - Netlib BLAS: the official implementation
 - GotoBLAS (and GotoBLAS2): open-source implementation (BSD Licence)
@@ -22,7 +22,7 @@ BLAS is actually a *specification* for the format used to call the common linear
 
 ## LAPACK
 LAPACK is built on top of BLAS in the sense that it calls functions from BLAS. Hence, choosing a faster BLAS implementaion for your CPU may accelerate LAPACK as well.
-Likewise BLAS, LAPACK comes under different implementations. Netlib LAPACK is the official LAPACK implementation, and Intel MKL, Accelerate, and OpenBLAS all include a reimplementation of LAPACK.
+Likewise BLAS, LAPACK comes under different implementations. Netlib LAPACK is the official LAPACK implementation, and Intel MKL and Accelerate both include a reimplementation of LAPACK.
 
 Given that BLAS and LAPACK implementations often come bundled together, I will refer to both libraries under the name "BLAS".
 
