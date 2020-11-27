@@ -1,7 +1,9 @@
 
 # Accelerating Linear Algebra Operations in R by changing the BLAS library
 
-I read in many places that R can get way faster is you change the BLAS library it is linked to. Is this true?
+I read in many places that R can get way faster is you change the BLAS library it is linked to. Is it true?
+
+**TL;DR: Yes**, changing your BLAS library can lead to massive speedups, especially for linear algebra operations. To see how to change your BLAS library, read along.
 
 This repo is a tentative effort to understanding how to tune R to have good performances. If you have comments, critics, suggestions of benchmarks, or if you have results that you think may be useful, please leave a pull request!
 
