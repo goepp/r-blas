@@ -167,6 +167,8 @@ This line is here to remind that when inverting several sparse matrices with the
 
 
 
+## TODO
+- checkout the package [gcbd](https://cran.r-project.org/web/packages/gcbd/vignettes/gcbd.pdf) for comparison of BLAS implementations in R.
 
 
 ## References
