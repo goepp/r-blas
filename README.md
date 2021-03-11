@@ -161,13 +161,19 @@ The elapsed times (in seconds) are:
 |solve (with spd matrix)       |73.2 |8.67|**3.82**|4.646|
 |solve (after Cholesky decomp) |0.202 |**0.164**|**0.165**|0.235|
 
-Conclusion: the choice of BLAS impact only `Schur` and `solve` (with spd matrices).
-Note: The `solve` using `Cholesky` decomposition calls a C library called CHOLMOD (see ?Matrix::Cholesky), so it is expected that its computing time does not depend on the BLAS library.
-This line is here to remind that when inverting several sparse matrices with the *same* sparsity pattern, the choice of the BLAS library does not matter. Indeed, in this case, one can call `Cholesky` *once* (which is the computational bottleneck) and use that decompotion many times in the `Matrix::solve` function, which computes way faster than without reusing the Cholesky decomposition (see `?Matrix::`CHMfactor-class``.
+
+### Conclusion 
+Only the functions `Schur` and `solve` (with spd matrices) are significantly impacted by the BLAS library.
+The reported run-times are not averaged over several repetitions, but after I reran it by hand a few times, all other functions than `Schur` and `solve` seemed to have similar runtimes on average (results not shown here).
+
+#### Note
+The `solve` using `Cholesky` decomposition calls a C library called CHOLMOD (see ?Matrix::Cholesky), so it is expected that its computing time does not depend on the BLAS library.
+This line is here to remind that when inverting several sparse matrices with the *same* sparsity pattern, the choice of the BLAS library does not matter. Indeed, in this case, one can call `Cholesky` *once* (which is the computational bottleneck) and use that decompotion many times in the `Matrix::solve` function, which computes way faster than without reusing the Cholesky decomposition (see `?Matrix::`CHMfactor-class`.
 
 
 
 ## TODO
+- Sparse matrix runtime experiments over multiple repetions
 - checkout the package [gcbd](https://cran.r-project.org/web/packages/gcbd/vignettes/gcbd.pdf) for comparison of BLAS implementations in R.
 
 
